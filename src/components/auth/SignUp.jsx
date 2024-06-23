@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import axiosV1 from '../../utils/axiosV1';
 import BtnLoader from '../helpers/BtnLoader';
+import Logo from '../../assets/logo_white.png';
 
 function SignUp() {
     const { navigate } = useNavigate();
@@ -33,7 +34,7 @@ function SignUp() {
         const user = JSON.parse(localStorage.getItem('user'));
 
         if (token && user && token === axiosV1.defaults.headers.common.Authorization) {
-            navigate('/dashboard');
+            navigate(user?.role === 'ROLE_ADMIN' ? '/admin-dashboard' : '/dashboard');
         } else {
             delete axiosV1.defaults.headers.common.Authorization;
         }
@@ -76,13 +77,15 @@ function SignUp() {
     };
 
     return (
-        <div className="container-fluid bg-telegram">
+        <div className="container-fluid bg-windows">
             <div className="row justify-content-center align-items-center min-vh-100">
-                <div className="col-xl-6 col-lg-7 col-md-8 col-12">
-                    <div className="card">
+                <div className="col-xl-6 col-lg-7 col-md-8 col-12 p-3">
+                    <div className="card glassmorphism">
                         <div className="card-body">
-                            <h4 className="text-primary text-center mb-3">Sign Up</h4>
-                            <form onSubmit={handleSubmit(submitHandler)}>
+                            <div className="text-center mb-3">
+                                <Link to="/"><img src={Logo} alt="KRASV" className="w-25" /></Link>
+                            </div>
+                            <form onSubmit={handleSubmit(submitHandler)} className="text-light">
                                 <div className="row g-3">
                                     <div className="col-12">
                                         <label htmlFor="name" className="fw-semibold">Name <span className="text-danger">*</span></label>
@@ -149,14 +152,14 @@ function SignUp() {
                                         {errors?.address && <small className="text-danger">{errors?.address?.message}</small>}
                                     </div>
                                     <div className="col-12 text-end">
-                                        {isBtnLoading ? <BtnLoader /> : <button type="submit" className="btn btn-sm btn-primary">Submit</button>}
+                                        {isBtnLoading ? <BtnLoader /> : <button type="submit" className="btn btn-sm btn-primary">Sign Up</button>}
                                     </div>
                                 </div>
                             </form>
                         </div>
                     </div>
                     <div className="text-center">
-                        <small className="text-muted">Already have an account? <Link to="/sign-in" className="text-dark text-decoration-none fw-semibold">Sign In</Link></small>
+                        <small className="text-light">Already have an account? <Link to="/sign-in" className="text-light text-decoration-none fw-semibold">Sign In</Link></small>
                     </div>
                 </div>
             </div>

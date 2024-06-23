@@ -87,7 +87,7 @@ function CreditAmount() {
                     </form>
                 </Modal.Body>
             </Modal>
-            <button type="button" className="btn btn-sm btn-outline-primary me-1" onClick={handleShow}>Credit Amount</button>
+            <div onClick={handleShow} aria-hidden>Credit Amount</div>
         </>
     );
 }

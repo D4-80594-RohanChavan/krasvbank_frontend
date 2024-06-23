@@ -1,9 +1,12 @@
 import moment from 'moment';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
 import DataTable from 'react-data-table-component';
 import axiosV1 from '../../utils/axiosV1';
+import PageTitle from '../helpers/PageTitle';
+import TableLoader from '../helpers/TableLoader';
+import NoData from '../helpers/NoData';
 
 function TransactionHistory() {
     const { register, handleSubmit, formState: { errors } } = useForm({
@@ -14,6 +17,14 @@ function TransactionHistory() {
     });
     const [isTableLoading, setIsTableLoading] = useState(false);
     const [transactionData, setTransactionData] = useState([]);
+
+    useEffect(() => {
+        document.title = 'Transaction History';
+        return () => {
+
+        };
+    }, []);
+
     const columns = [
         {
             name: 'Transaction ID',
@@ -74,33 +85,42 @@ function TransactionHistory() {
     };
 
     return (
-        <div className="card">
-            <div className="card-header bg-transparent">
-                <div className="row align-items-center">
-                    <div className="col-xl-9 col-lg-8 col-md-7">
-                        <h6 className="mb-0">List of Transactions</h6>
-                    </div>
-                    <div className="col-xl-3 col-lg-4 col-md-5 col-12 text-end">
-                        <form onSubmit={handleSubmit(submitHandler)}>
-                            <div className="input-group input-group-sm justify-content-start justify-content-md-end">
-                                <input type="search" inputMode="numeric" className="form-control form-control-sm" id="accountNumber" {...register('accountNumber', { required: 'This field is required.', pattern: { value: /^\d+$/, message: 'Please enter valid account number.' } })} placeholder="Account Number" />
-                                <button type="submit" className="btn btn-sm btn-primary">Submit</button>
+        <div className="container-fluid p-0">
+            <PageTitle breadcrumb={[{ name: 'Transaction History' }]} />
+            <div className="row">
+                <div className="col-12">
+                    <div className="card border-primary">
+                        <div className="card-header bg-primary-subtle border-primary">
+                            <div className="row align-items-center">
+                                <div className="col-xl-9 col-lg-8 col-md-7">
+                                    <h6 className="mb-0">List of Transactions</h6>
+                                </div>
+                                <div className="col-xl-3 col-lg-4 col-md-5 col-12 text-end">
+                                    <form onSubmit={handleSubmit(submitHandler)}>
+                                        <div className="input-group input-group-sm justify-content-start justify-content-md-end">
+                                            <input type="search" inputMode="numeric" className="form-control form-control-sm" id="accountNumber" {...register('accountNumber', { required: 'This field is required.', pattern: { value: /^\d+$/, message: 'Please enter valid account number.' } })} placeholder="Account Number" />
+                                            <button type="submit" className="btn btn-sm btn-primary">Submit</button>
+                                        </div>
+                                        {errors?.accountNumber && <small className="text-danger">{errors?.accountNumber?.message}</small>}
+                                    </form>
+                                </div>
                             </div>
-                            {errors?.accountNumber && <small className="text-danger">{errors?.accountNumber?.message}</small>}
-                        </form>
+                        </div>
+                        <div className="card-body p-1">
+                            <DataTable
+                                dense
+                                striped
+                                responsive
+                                data={transactionData}
+                                columns={columns}
+                                pagination
+                                progressPending={isTableLoading}
+                                progressComponent={<TableLoader />}
+                                noDataComponent={<NoData />}
+                            />
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div className="card-body p-1">
-                <DataTable
-                    dense
-                    striped
-                    responsive
-                    data={transactionData}
-                    columns={columns}
-                    pagination
-                    progressPending={isTableLoading}
-                />
             </div>
         </div>
     );

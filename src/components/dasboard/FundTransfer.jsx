@@ -94,7 +94,7 @@ function FundTransfer() {
                     </form>
                 </Modal.Body>
             </Modal>
-            <button type="button" className="btn btn-sm btn-outline-primary" onClick={handleShow}>Fund Transfer</button>
+            <div onClick={handleShow} aria-hidden>Fund Transfer</div>
         </>
     );
 }
