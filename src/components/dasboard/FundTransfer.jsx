@@ -31,19 +31,28 @@ function FundTransfer() {
         data.destinationAccountNumber = parseInt(data?.destinationAccountNumber, 10);
         data.amount = parseInt(data?.amount, 10);
         axiosV1.post('/user/transfer', data)
-            .then(() => {
+            .then((response) => {
                 handleClose();
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Amount debited successfully.',
-                    timer: 3000,
-                    showConfirmButton: false,
-                });
+                if (response?.data?.responseMessage === 'Insufficient balance') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: response?.data?.responseMessage ?? 'Insufficient balance.',
+                        timer: 3000,
+                        showConfirmButton: false,
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Amount transfered successfully.',
+                        timer: 3000,
+                        showConfirmButton: false,
+                    });
+                }
             })
             .catch((error) => {
                 Swal.fire({
                     icon: 'error',
-                    title: error?.response?.data?.responseMessage ?? 'Failed to debit amount.',
+                    title: error?.response?.data?.responseMessage ?? 'Failed to transfer amount.',
                     timer: 3000,
                     showConfirmButton: false,
                 });

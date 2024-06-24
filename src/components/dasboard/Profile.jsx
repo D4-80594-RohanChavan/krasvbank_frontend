@@ -38,12 +38,6 @@ function Profile() {
                                     <p className="mb-0"><span className="fw-semibold">Alternate Phone Number:</span> {user?.alternativePhoneNumber ?? ''}</p>
                                 </div>
                                 <div className="col-md-6 col-12">
-                                    <p className="mb-0"><span className="fw-semibold">Aadhar Card:</span> {user?.aadharCard ?? ''}</p>
-                                </div>
-                                <div className="col-md-6 col-12">
-                                    <p className="mb-0"><span className="fw-semibold">PAN Card:</span> {user?.panCard ?? ''}</p>
-                                </div>
-                                <div className="col-md-6 col-12">
                                     <p className="mb-0"><span className="fw-semibold">State:</span> {user?.stateOfOrigin ?? ''}</p>
                                 </div>
                                 <div className="col-12">

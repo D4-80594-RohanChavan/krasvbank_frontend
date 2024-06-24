@@ -29,14 +29,23 @@ function DebitAmount() {
         data.accountNumber = parseInt(data?.accountNumber, 10);
         data.amount = parseInt(data?.amount, 10);
         axiosV1.post('/user/debit', data)
-            .then(() => {
+            .then((response) => {
                 handleClose();
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Amount debited successfully.',
-                    timer: 3000,
-                    showConfirmButton: false,
-                });
+                if (response?.data?.responseMessage === 'Insufficient balance') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: response?.data?.responseMessage ?? 'Insufficient balance.',
+                        timer: 3000,
+                        showConfirmButton: false,
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Amount debited successfully.',
+                        timer: 3000,
+                        showConfirmButton: false,
+                    });
+                }
             })
             .catch((error) => {
                 Swal.fire({
